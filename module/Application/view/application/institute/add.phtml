@@ -1,0 +1,138 @@
+<div class="row">
+	<div class="adMnIdL col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-0 col-lg-8 col-xs-12 col-md-8 col-sm-8">
+		<div class="box box-primary clearfix" id="userRegForm">
+			<div>
+				<h3 class="text-center">
+					Institute Management
+				</h3>
+
+			</div>
+
+			<div
+				class="col-md-12 col-sm-12 col-xs-12">
+		
+
+<?php
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('method', 'post');
+$form->setAttribute('class', 'form');
+$form->setAttribute('role', 'form');
+$form->setAttribute('autocomplete', 'off');
+echo $this->form()->openTag($form);
+?>
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+                      <label for="exampleInputEmail1">Name</label>
+
+<?php
+
+$name = $form->get('name');
+echo $this->formtext($name);
+echo $this->formelementerrors($name);
+?>
+</div>
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+                      <label for="exampleInputEmail1">Institute's Email-Id</label>
+<?php
+
+$emailId = $form->get('emailId');
+echo $this->formemail($emailId);
+echo $this->formelementerrors($emailId);
+?>
+</div>
+
+
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+                      <label for="exampleInputEmail1">Institute's Alternate Email-Id</label>
+<?php
+
+$emailIdTwo = $form->get('emailIdTwo');
+echo $this->formemail($emailIdTwo);
+echo $this->formelementerrors($emailIdTwo);
+?>
+</div>
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+                      <label for="exampleInputEmail1">Phone Number</label>
+<?php
+
+$phoneNumber = $form->get('phoneNumber');
+echo $this->formnumber($phoneNumber);
+echo $this->formelementerrors($phoneNumber);
+?>
+</div>
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+                      <label for="exampleInputEmail1">Additional Contact Number(Optional)</label>
+
+<?php
+
+$phoneNumberTwo = $form->get('phoneNumberTwo');
+echo $this->formnumber($phoneNumberTwo);
+echo $this->formelementerrors($phoneNumberTwo);
+?>
+</div>
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+                      <label for="exampleInputEmail1">Additional Contact Number(Optional)</label>
+<?php
+
+$phoneNumberThree = $form->get('phoneNumberThree');
+echo $this->formnumber($phoneNumberThree);
+echo $this->formelementerrors($phoneNumberThree);
+?>
+</div>
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+                      <label for="exampleInputEmail1">Pincode/ZipCode</label>
+
+<?php
+
+$pincode = $form->get('pincode');
+echo $this->formnumber($pincode);
+echo $this->formelementerrors($pincode);
+?>
+</div>
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+                      <label for="exampleInputEmail1">Status</label>
+<?php
+
+$status = $form->get('enabled');
+echo $this->formselect($status);
+
+?>
+</div>
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+                      <label for="exampleInputEmail1">Country</label>
+
+<?php
+
+$country = $form->get('country');
+echo $this->formselect($country);
+
+?>
+</div>
+
+
+<?php
+
+$csrf = $form->get('mcsrf');
+echo $this->formhidden($csrf);
+echo $this->formElementErrors($csrf);
+
+?>
+
+		
+
+		<div class="form-group col-md-12 col-sm-12 col-xs-12">
+					<div class="control-group">
+						<div class="controls">
+							<button class="btn btn-primary btn-block">Save</button>
+						</div>
+					</div>
+				</div>
+		<?php
+echo $this->form()->closeTag();
+?>
+		</div>
+
+		</div>
+	</div>
+</div>
+

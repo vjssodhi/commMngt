@@ -1,0 +1,61 @@
+<div class="row">
+	
+	<div class="adMnIdL col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-0 col-lg-8 col-xs-12 col-md-8 col-sm-8">
+<div class="box box-primary clearfix">
+<div class="col-md-12 col-sm-12 col-xs-12">
+	<?php
+$instituteComponents = $this->instituteComponents;
+$institutesInfo = $this->institutesInfo;
+if (empty($instituteComponents)) {
+    ?>
+	    <h3>No Fee Structure(s) exist</h3>
+	    <?php
+} else {
+    
+    foreach ($instituteComponents as $instituteId => $components) {
+        
+        ?>
+       <table class="table table-bordered">
+			<caption class="Fee_Structure">Fee Structure for: 
+                             
+                            <strong><b style="font-family: 'Source Sans Pro,sans-serif';font-size:15px;"><?php echo $institutesInfo[$instituteId]['name']?> <a
+					href="<?php echo $this->url('institute/updatefeestructure',array('instituteId'=>$instituteId)); ?>"><i
+					class="fa fa-pencil-square-o"></i> </a></b></strong>
+			</caption>
+			<thead>
+				
+					<?php
+        foreach ($components as $component) {
+            $status = $component['enabled'];
+            if ($status == 0) {
+                $class = "text-danger";
+                $status = 'DISABLED';
+            } else {
+                $status = 'ENABLED';
+                $class = "text-success";
+            }
+            ?><tr class="table_border">
+					    <td><?php echo $component['name'].'('.$status.')'?></td> <td><?php echo $component['amount']?></td></tr>
+					    <?php
+        }
+        ?>
+				
+			</thead>
+			<tbody><?php
+        foreach ($components as $component) {
+            
+            ?>
+					   
+					    <?php
+        }
+        ?>
+		
+		</tbody>
+
+		</table>
+       <?php
+    }
+    ?><?php
+}
+?></div></div>
+</div></div>

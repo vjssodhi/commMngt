@@ -1,0 +1,280 @@
+<?php
+use Zend\Session\Container;
+
+echo $this->doctype();
+?><html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <?php
+        
+        echo $this->headTitle($this->translate('Commission Management '))
+            ->setSeparator(' - ')
+            ->setAutoEscape(false)?>
+        <?php
+        echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge');
+   
+?>
+   	 <!-- Font Awesome -->
+    	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	 <!-- Ionicons -->
+	 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+	 <!-- Theme style -->
+<?php
+     echo $this->headLink()
+           
+            ->prependStylesheet($this->basePath('css/dist/css/AdminLTE.min.css'))
+            ->prependStylesheet($this->basePath('style.css'))
+            ->prependStylesheet($this->basePath('css/bootstrap/css/bootstrap.min.css'))
+            ->prependStylesheet($this->basePath('css/dist/css/skins/_all-skins.min.css'))
+            ->prependStylesheet($this->basePath('css/plugins/iCheck/flat/blue.css'))
+            ->prependStylesheet($this->basePath('css/plugins/morris/morris.css'))
+            ->prependStylesheet($this->basePath('css/plugins/jvectormap/jquery-jvectormap-1.2.2.css'))
+            ->prependStylesheet($this->basePath('css/plugins/datepicker/datepicker3.css'))
+            ->prependStylesheet($this->basePath('css/plugins/daterangepicker/daterangepicker-bs3.css'))
+            ->prependStylesheet($this->basePath('css/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'))
+            ->prependStylesheet($this->basePath('css/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'))
+            ->prependStylesheet($this->basePath('css/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'))
+            ->prependStylesheet($this->basePath('css/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'))
+            ->prependStylesheet($this->basePath('css/plugins/iCheck/flat/blue.css'));
+
+         ?>
+        <!-- Scripts -->
+        <?php
+        echo $this->headScript()
+            ->prependFile($this->basePath('js/bootstrap.min.js'))
+            ->prependFile($this->basePath('js/jquery.min.js'))
+            ->prependFile($this->basePath('js/respond.min.js'), 'text/javascript', array(
+            'conditional' => 'lt IE 9'
+        ))
+            ->prependFile($this->basePath('js/html5shiv.min.js'), 'text/javascript', array(
+            'conditional' => 'lt IE 9'
+        ));
+        ?>
+  <?php
+    if ($this->identity()) {
+        $userInfoContainer = new Container(USER_INFO_CONTAINER_NAME);
+        $allInfo = $userInfoContainer->allInfo;
+        $accessLevel = $userInfoContainer->accessLevel;
+    }
+    ?>
+  </head>
+  <body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+      <header class="main-header">
+        <!-- Logo -->
+        <a href="/home" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+          <span class="logo-mini"><b>A</b>LT</span>
+          <!-- logo for regular state and mobile devices -->
+          <span class="logo-lg"><b>Agent</b> Commission</span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+             <?php
+           if ($this->identity()) {
+            ?>
+                  <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <img src="/css/dist/img/user1-128x128.jpg" class="user-image" alt="User Image">
+
+                  <span class="hidden-xs"><?php echo $userInfoContainer->allInfo['fullName']?></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- User image -->
+                  <li class="user-header">
+                    <img src="/css/dist/img/user1-128x128.jpg" class="img-circle" alt="User Image">
+                    <p>
+                    
+                      <small> <?php echo $userInfoContainer->allInfo['personalEmailId']?></small>
+                    </p>
+                  </li>
+                  
+                  <li class="user-footer">
+                    <div class="pull-left">
+                      <a href="#" class="btn btn-default btn-flat">Profile</a>
+                    </div>
+                    <div class="pull-right">
+                      <a href="/user/signout" class="btn btn-default btn-flat">Sign out</a>
+                    </div>
+                  </li>
+              <?php
+    }
+    ?>
+            </ul>
+
+          </div>
+        </nav>
+      </header>
+			<?php
+                        if ($this->identity()) {
+                             ?>
+				
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+          <!-- Sidebar user panel -->
+          <div class="user-panel">
+            
+            <!--<div class="pull-left info">
+              <p> <?php echo $userInfoContainer->allInfo['personalEmailId']?></p>
+              <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>-->
+          </div>
+          
+          <!-- sidebar menu: : style can be found in sidebar.less -->
+          <ul class="sidebar-menu">
+            
+
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-university"></i><span>Institutes</span> <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="/institute/add"><i class="fa fa-plus-square"></i>Add New Institute</a></li>
+                <li class="active"><a href="/institute"><i class="fa fa-plus-square"></i>Add new Components to fee Structure</a></li>
+                <li><a href="/institute/listcomponents"><i class="fa fa-list"></i>View All Free Structures</a></li>
+                
+                <li class="active"><a href="/institute/listall"><i class="fa fa-list"></i>List Institutes</a></li>
+               
+              </ul>
+            </li>
+            <li class="treeview">
+              <a href="#">
+               <i class="fa fa-money"></i>
+                <span>Commission</span><i class="fa fa-angle-left pull-right"></i>
+               
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="/agent/list?commissionStatus=<?php echo urlencode('Commission is Due')?>"><i class="fa fa-hourglass-start"></i>Pending</a></li>
+                <li><a href="/agent/list?commissionStatus=<?php echo urlencode('Commission has been Fully Paid')?>"><i class="fa fa-hourglass-end"></i>Paid</a></li>
+                
+              </ul>
+            </li>
+           
+            <li class="treeview">
+
+              <a href="#">
+                <i class="fa fa-graduation-cap"></i>
+                <span>Student</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="/agent/list"><i class="fa fa-plus-square"></i></i>Add New</a></li>
+                <li><a href="/student/list"><i class="fa fa-list"></i>View Students</a></li>
+                
+              </ul>
+            </li>
+            <li class="treeview">
+              <a href="#">
+                <span class="glyphicon glyphicon-user"> </span> <span>Agent</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li> <a href="/institute/listall"><i class="fa fa-plus-square"></i> Add Agent</a></li>
+                <li><a href="/agent/list"><i class="fa fa-list"></i>View Agents</a></li>
+                
+              </ul>
+            </li>
+              <li class="treeview">
+              <a href="#">
+                <i class="fa fa-file-text-o"></i> <span>Invoices</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li> <a href="#"><i class="fa fa-print"></i>Generate Invoice</a></li>
+               
+                
+              </ul>
+            </li>
+           
+               
+          </ul>
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+	<?php
+                      }
+                              ?>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+      
+        <!-- Main content -->
+        <section class="content">
+          <?php echo $this->content; ?>
+
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+</div>
+      <footer class="main-footer">
+        <strong>Copyright &copy; 2015-<?=date("Y")?> All rights reserved.
+      </footer>
+
+      <!-- Control Sidebar -->
+      
+      <!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+      <div class="control-sidebar-bg"></div>
+    </div><!-- ./wrapper -->
+
+    <!-- jQuery 2.1.4 -->
+<script>
+$( ".dropdown" ).click(function() {
+  $( ".dropdown-menu" ).toggle( "slow", function() {
+    // Animation complete.
+  });
+});
+
+ 
+
+
+</script>
+    <script src="/css/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="/css/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Morris.js charts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="/morris/morris.min.js"></script>
+    <!-- Sparkline -->
+    <script src="/css/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <!-- jvectormap -->
+    <script src="/css/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="/css/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="/css/plugins/knob/jquery.knob.js"></script>
+    <!-- daterangepicker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+    <script src="/css/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- datepicker -->
+    <script src="/css/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <!-- Bootstrap WYSIHTML5 -->
+    <script src="/css/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+    <!-- Slimscroll -->
+    <script src="/css/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="/css/plugins/fastclick/fastclick.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/css/dist/js/app.min.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="/css/dist/js/pages/dashboard.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="/css/dist/js/demo.js"></script>
+  </body>
+</html>

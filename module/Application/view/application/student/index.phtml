@@ -1,0 +1,114 @@
+<?php
+use Application\Entity\Student;
+use Application\Entity\Programme;
+use Application\Entity\Institute;
+use Application\Entity\Agent;
+/* @var $ */
+/* @var $agent Agent */
+/* @var $programme Programme */
+/* @var $institute Institute */
+$student = $this->student;
+$agent = $this->agent;
+$programme = $this->programme;
+$institute = $this->institute;
+$breakDowns = $this->breakDowns;
+$structOptions = $this->structOptions;
+?>
+<div class="row">
+	
+	<div class="adMnIdL col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-0 col-lg-8 col-xs-12 col-md-8 col-sm-8">
+
+<div class="box box-primary clearfix">
+               
+</br>
+		<a class="btn btn-xs btn-default btn-block"
+			href="<?php
+echo $this->url('student/update', array(
+    'studentId' => $student->getId()
+));
+?>">Edit Case&nbsp;<i class="fa fa-pencil-square-o"></i>
+		</a><a class="btn btn-xs btn-default btn-block"
+			href="<?php
+echo $this->url('student/list');
+?>">View All Students&nbsp;<i class="fa fa-list"></i>
+		</a></br>
+<div class="col-xs-12">
+
+                    <!-- START CUSTOM TABS -->
+         
+          <div class="row">
+            <div class="col-md-12">
+              <!-- Custom Tabs -->
+              <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab_1" data-toggle="tab"><b>Basic Details</b></a></li>
+                    <li><a href="#tab_2" data-toggle="tab"><b>Program/Fee Details</b></a></li>
+                  <li><a href="#tab_3" data-toggle="tab"><b>Student Agent</b></a></li>
+                 </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                    <b>Student Basic Details</b>
+                    <table width="500"> <tr><td>Name</td><td>:&nbsp;	<?php echo $student->getName()?></td></tr>
+	<tr><td>Gender</td><td>:&nbsp;	<?php echo $student->getGender()?></td></tr>
+	<tr><td>Date of Birth</td><td>:&nbsp;<?php echo $student->getDateOfBirth()?></td></tr>
+	<tr><td>Email Id</td><td>:&nbsp;	<?php echo $student->getEmailId()?></td></tr>
+	<tr><td>Mobile</td><td>:&nbsp;	<?php echo $student->getMobile()?></td></tr>
+	<tr><td>Address</td><td>:&nbsp;	<?php echo $student->getAddress()?></td></tr>
+                    </table>
+                  </div><!-- /.tab-pane -->
+                  <div class="tab-pane" id="tab_2">
+                  <table width="500">
+                   <?php
+$status = $student->getCommissionStatus();
+if ($status == 0) {
+    $class = "alert-danger";
+    $status = 'PENDING';
+} else {
+    $status = 'PAID';
+    $class = "alert-success";
+}
+$currency = $programme->getFeeCurrency();
+?>
+	
+	<tr><td>Programme Name</td><td>:&nbsp;	<?php echo $programme->getName()?></td></tr>
+	<tr><td>Programme Fees</td><td>:&nbsp;	<?php echo $this->currencyFormat($programme->getFeeAmount(), $currency, false, LOCALE)?></td></tr>
+		<br>
+	<tr><td>Tuition Fees specified at time of Enrollment</td><td>:&nbsp;	<?php
+echo $this->currencyFormat($student->getFeeAmount(), $student->getFeeCurrency(), false, LOCALE)?></td></tr>
+		
+	<?php
+$breakDownTotal = 0;
+if (! empty($breakDowns)) {
+    foreach ($breakDowns as $breakDown) {
+        $amt = $breakDown['amount'];
+        $breakDownTotal = $breakDownTotal + $amt;
+        $amt = $this->currencyFormat($amt, $currency, false, LOCALE);
+        echo "<tr><td>".$structOptions[$breakDown['componentId']]['name'] . ' </td><td>:&nbsp;' . $amt . '</td></tr>';
+    }
+}
+?></td></td>
+	 <tr><td><strong>Total Fees:</td><td> <?php
+$feeAtTimeOfEnrollment = $student->getFeeAmount();
+$totalFees = $feeAtTimeOfEnrollment + $breakDownTotal;
+echo "</strong><strong>:&nbsp;";
+echo $this->currencyFormat($totalFees, $currency, false, LOCALE);
+?></strong><br> </td></tr></table></div>
+                  <!-- /.tab-pane -->
+                  <div class="tab-pane" id="tab_3">
+                  <table width="500">	<tr><td>Agent Name	</td><td>:&nbsp;<?php echo $agent->getName()?></td></tr>
+                <tr><td>Agent Mobile	</td><td>:&nbsp;<?php echo $agent->getMobile()?></td></tr>
+	<tr><td>Agent Email	</td><td>:&nbsp;<?php echo $agent->getEmailId()?></td></tr>	
+	<tr><td>Commission Status</td><td>:	<?php echo $status?><br>
+	<tr><td>Commission specified at time of enrollment</td><td>:&nbsp;	<?php
+echo $this->currencyFormat($student->getCommissionToBePaidByInstitute(), $programme->getFeeCurrency(), false, LOCALE);
+?><br>  </tr></table></div>
+                  </div><!-- /.tab-pane -->
+                </div><!-- /.tab-content -->
+              </div><!-- nav-tabs-custom -->
+              
+	
+	
+	</div>
+
+	</div></div></div>
+</div>

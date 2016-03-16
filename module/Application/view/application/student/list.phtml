@@ -1,0 +1,177 @@
+<div class="row">
+	<div class="col-md-12">
+	<div class="adMnIdL col-lg-12 col-xs-12 col-md-12 col-sm-12 box box-primary">
+	<?php
+use Application\Entity\Student;
+if (! empty($this->instituteId)) {
+    $instituteId = $this->instituteId;
+}
+?>
+<div class="row">
+			<div class="col-lg-12">
+				<!--<a class="btn btn-xs btn-block btn-info"
+					href="<?php echo $this->url('institute/list'); ?>">Show All
+					Institutes <i class="fa fa-list-alt"></i>
+				</a>--> 
+			<?php
+
+if (! empty($instituteId)) {
+    ?>
+			    <a class="btn btn-xs btn-block btn-info"
+					href="<?php echo $this->url('agent/list',array('instituteId'=>$instituteId)); ?>">List
+					Agents <i class="fa fa-list-alt"></i>
+				</a>
+			    <?php
+}
+?>
+<?php
+
+$allStudents = $this->allStudents;
+if (! empty($allStudents)) {
+    echo $this->headLink()->prependStylesheet($this->basePath('css/dataTables.bootstrap.min.css'));
+    $allUSers = $this->data['allUsers'];
+    
+    ?>	
+		<table id="allUsersNode" class="table table-striped table-bordered"
+					cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>Agent Details</th>
+							<th>Student Details</th>
+							<th>Programme Details</th>
+							<th>Commission Details</th>
+
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>Agent Details</th>
+							<th>Student Details</th>
+							<th>Programme Details</th>
+							<th>Commission Details</th>
+						</tr>
+					</tfoot>
+					<tbody>
+	<?php
+    foreach ($allStudents as $student) {
+        $student instanceof Student;
+        $studentId = $student->getId();
+        $cmPercentage = $student->getAgent()->getCommissionPercentage();
+        $courseFees = $student->getProgramme()->getFeeAmount();
+        $courseFeeCurrency = $student->getProgramme()->getFeeCurrency();
+        $defaultComsn = (($cmPercentage / 100) * ($courseFees));
+        $cmsToPePaid = $student->getCommissionToBePaidByInstitute();
+        $morEleId = 'feeChart' . $student->getId();
+        $status = $student->getCommissionStatus();
+        if ($status == 0) {
+            $class = "alert-danger";
+            $status = 'PENDING';
+        } else {
+            $status = 'PAID';
+            $class = "alert-success";
+        }
+        $statData = array(
+            "element" => $morEleId,
+            "data" => array(
+                array(
+                    'label' => 'Agent Commission',
+                    'value' => $cmsToPePaid
+                ),
+                array(
+                    'label' => 'Remaining Fees',
+                    'value' => $courseFees - $cmsToPePaid
+                )
+            )
+        );
+        ?><tr id="<?php echo $studentId;?>">
+							<td><a class="btn btn-xs"
+								href="<?php echo $this->url('agent/details',array('agentId'=>$student->getAgent()->getId())); ?>">Agent
+									Details&nbsp;<i class="fa fa-user"></i>
+							</a><br>
+									<?php
+        echo $student->getAgent()->getName()?><br> <?php
+        echo $student->getAgent()->getEmailId()?><br> <?php
+        echo $student->getAgent()->getMobile()?></td>
+							<td><a class="btn btn-xs btn-default btn-block"
+								href="<?php
+        echo $this->url('student/update', array(
+            'studentId' => $student->getId()
+        ));
+        ?>">Edit Case&nbsp;<i class="fa fa-pencil-square-o"></i>
+							</a> <a class="btn btn-xs btn-default btn-block"
+								href="<?php
+        echo $this->url('student/details', array(
+            'studentId' => $student->getId()
+        ));
+        ?>">View Details&nbsp;<i class="fa fa-user"></i>
+							</a><span>Name: <?php
+        echo $student->getName()?></span><br> <span>Email: <?php
+        
+        echo $student->getEmailId()?></span> <br></td>
+							<td><span>Institute: <?php
+        echo ucwords($student->getProgramme()
+            ->getInstitute()
+            ->getName())?></span>
+								<p>Programme: <?php
+        echo $student->getProgramme()->getName()?><br> Fees: <?php
+        echo $this->currencyFormat($courseFees, $courseFeeCurrency)?></p></td>
+							<td>
+								Default Commission: <?php
+        echo $student->getAgent()->getCommissionPercentage() . '%=' . $this->currencyFormat($defaultComsn, $courseFeeCurrency);
+        ?>
+					<br> Commission Finalized:  <?php
+        echo $this->currencyFormat($cmsToPePaid, $courseFeeCurrency);
+        ?>
+					
+							</td>
+						</tr>
+<?php }?>
+	</tbody>
+				</table><?php }else{?>
+				<h1 class="text-center">No Students have been registered so far</h1>
+				<?php }?> 
+	</div>
+		</div>
+	</div>
+</div>
+</div>
+<?php
+if (ENABLE_DATATABLES) {
+    echo $this->headScript()
+        ->prependFile($this->basePath('js/dataTables.bootstrap.min.js'))
+        ->prependFile($this->basePath('js/jquery.dataTables.min.js'));
+    
+    ?>
+<script type="text/javascript">
+
+
+$(document).ready(function() {
+	var getParameterByName= function (name, url) {
+	    if (!url) url = window.location.href;
+	    name = name.replace(/[\[\]]/g, "\\$&");
+	    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+	        results = regex.exec(url);
+	    if (!results) return null;
+	    if (!results[2]) return '';
+	    return decodeURIComponent(results[2].replace(/\+/g, " "));
+	}
+	var commStatus;
+	var searchP;
+	var thisLocation;
+ 	thisLocation=window.location.href;
+    commStatus=getParameterByName('commissionStatus',thisLocation);
+    searchP=getParameterByName('search',thisLocation);
+    if(commStatus !== null){
+    	var table= $('#allUsersNode').DataTable({"searching": true});
+        table.search(commStatus).draw();
+    }else if(searchP !== null){
+    	var table= $('#allUsersNode').DataTable({"searching": true});
+        table.search(searchP).draw();
+        }else{
+    	$('#allUsersNode').DataTable();
+    }
+  	
+} );
+
+</script>
+<?php }?>

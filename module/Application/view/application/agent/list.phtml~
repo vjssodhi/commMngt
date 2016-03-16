@@ -1,0 +1,235 @@
+<?php
+use Application\Utilities\Misc;
+$data = $this->data;
+$agentImagePath = $this->basePath() . '/images/';
+$agentDefaultImage = $agentImagePath . 'agent.png';
+$agents = $data['allAgents'];
+$instituteInfo = $data['instituteInfo'];
+$countries = Misc::getCountries();
+?>
+<div class="row">
+	
+	<div class="adMnIdL col-lg-12 col-xs-12 col-md-12 col-sm-12">
+		<div class="row">
+			<div class="col-lg-12">
+				<!--<a class="btn btn-xs btn-block btn-default"
+					href="<?php echo $this->url('institute/list'); ?>">Show All
+					Institutes <i class="fa fa-list-alt"></i>
+				</a>-->
+<?php
+if (! empty($agents)) {
+    ?>
+
+
+				<div class="main-box no-header box box-primaryclearfix">
+					<div class="main-box-body clearfix">
+						<div class="table-responsive">
+							<table id="allAgentsNode" class="table user-list table-bordered">
+								<thead>
+									<tr>
+										<th><span>Associations</span></th>
+										<th><span>Agent</span></th>
+									</tr>
+								</thead>
+								<tbody>
+<?php
+    foreach ($agents as $agentEmail => $innnn) {
+        $institutes = $innnn['institutes'];
+        $agentName = $innnn['name'];
+        $mobile = $innnn['mobile'];
+        ?>
+         <tr>
+										<td>
+       <?php
+        
+        foreach ($institutes as $agent) {
+            $agentId = $agent['id'];
+            $agentName = $agent['name'];
+            $agentCommission = $agent['commissionPercentage'];
+            
+            $agentPhone = $agent['mobile'];
+            $createdOn = $agent['createdOn'];
+            $status = $agent['enabled'];
+            $address = $agent['address'];
+            $instituteId = $agent['instituteId'];
+            $instCountry = $countries[$instituteInfo[$instituteId]['country']];
+            if ($status == 0) {
+                $class = "label-danger";
+                $status = 'DISABLED';
+            } else {
+                $status = 'ENABLED';
+                $class = "label-success";
+            }
+            ?>
+            
+											<div class="well well-sm">
+												<i class="fa fa-university"></i>
+									<?php echo ucwords($instituteInfo[$instituteId]['name'])?>
+									<br> <a class="btn btn-xs"
+													href="<?php echo $this->url('agent/update',array('agentId'=>$agentId)); ?>">Edit&nbsp;<i
+													class="fa fa-pencil-square-o"></i>
+												</a> <a class="btn btn-xs"
+													href="<?php
+            
+            echo $this->url('student/enroll', array(
+                'instituteId' => $instituteId,
+                'agentId' => $agentId
+            ));
+            ?>">Enroll Student&nbsp;<i class="fa fa-check-square-o"></i>
+
+
+
+												</a>
+											</div> <?php
+        }
+        
+        ?></td>
+										<td><strong><?php echo $agentName?></strong><br>
+										<?php
+        $tMt = $innnn['paymentRecord']['totalAmount'];
+        $pAmt = $innnn['paymentRecord']['paidAmount'];
+        echo 'Total Commission:' . $tMt . '<br>';
+        echo 'Commission Dispatched:' . $pAmt . '<br>';
+        if ($pAmt < $tMt) {
+            echo '<span class="text-danger">Commission is Due:' . ($tMt - $pAmt) . '</span><br>';
+        } else {
+            echo '<span class="text-success">Commission has been Fully Paid</span><br>';
+        }
+        ?> <a class="btn btn-xs"
+											href="<?php echo $this->url('agent/details',array('agentId'=>$agentId)); ?>">View
+												Details&nbsp;<i class="fa fa-user"></i>
+										</a></td>
+									</tr>
+    <?php
+    }
+    ?>
+
+							</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<style>
+.main-box.no-header {
+	padding-top: 20px;
+}
+
+.main-box {
+	background: #FFFFFF;
+	-webkit-box-shadow: 1px 1px 2px 0 #CCCCCC;
+	-moz-box-shadow: 1px 1px 2px 0 #CCCCCC;
+	-o-box-shadow: 1px 1px 2px 0 #CCCCCC;
+	-ms-box-shadow: 1px 1px 2px 0 #CCCCCC;
+	box-shadow: 1px 1px 2px 0 #CCCCCC;
+	margin-bottom: 16px;
+	-webikt-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.table a.table-link.danger {
+	color: #e74c3c;
+}
+
+.label {
+	border-radius: 3px;
+	font-size: 0.875em;
+	font-weight: 600;
+}
+
+.user-list tbody td .user-subhead {
+	font-size: 0.875em;
+	font-style: italic;
+}
+
+.user-list tbody td .user-link {
+	display: block;
+	font-size: 1.25em;
+	padding-top: 3px;
+	margin-left: 60px;
+}
+
+a {
+	color: #3498db;
+	outline: none !important;
+}
+
+.user-list tbody td>img {
+	position: relative;
+	max-width: 50px;
+	float: left;
+	margin-right: 15px;
+}
+
+.table thead tr th {
+	text-transform: uppercase;
+	font-size: 0.875em;
+}
+
+.table thead tr th {
+	border-bottom: 2px solid #e7ebee;
+}
+
+.table tbody tr td:first-child {
+	font-size: 1.125em;
+	font-weight: 300;
+}
+
+.table tbody tr td {
+	font-size: 1em;
+	vertical-align: middle;
+	border-top: 1px solid #e7ebee;
+}
+</style>
+<?php
+} else {
+    ?>
+<h2>No Agents have been Registered so far</h2>
+				<a href="<?php echo $this->url('institute/list'); ?>">View Institute
+					List<i class="fa fa-plus-circle"></i>
+				</a>
+<?php
+}
+?>
+</div>
+		</div>
+	</div>
+</div>
+<?php
+echo $this->headScript()
+    ->prependFile($this->basePath('js/dataTables.bootstrap.min.js'))
+    ->prependFile($this->basePath('js/jquery.dataTables.min.js'));
+?>
+<script type="text/javascript">
+
+
+$(document).ready(function() {
+	var getParameterByName= function (name, url) {
+	    if (!url) url = window.location.href;
+	    name = name.replace(/[\[\]]/g, "\\$&");
+	    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+	        results = regex.exec(url);
+	    if (!results) return null;
+	    if (!results[2]) return '';
+	    return decodeURIComponent(results[2].replace(/\+/g, " "));
+	}
+	var commStatus;
+	var searchP;
+	var thisLocation;
+ 	thisLocation=window.location.href;
+    commStatus=getParameterByName('commissionStatus',thisLocation);
+    searchP=getParameterByName('search',thisLocation);
+    if(commStatus !== null){
+    	var table= $('#allAgentsNode').DataTable({"searching": true});
+        table.search(commStatus).draw();
+    }else if(searchP !== null){
+    	var table= $('#allAgentsNode').DataTable({"searching": true});
+        table.search(searchP).draw();
+        }else{
+    	$('#allAgentsNode').DataTable();
+    }
+  	
+} );
+
+</script>
